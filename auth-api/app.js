@@ -1,0 +1,31 @@
+import express from "express";
+import { response } from "express";
+import * as db from "./scr/config/db/initialData.js"
+import UserRoute from "./scr/modules/user/routes/UserRoute.js"
+import checkToken from "./scr/config/auth/checkToken.js";
+
+const app = express();
+const env = process.env;
+const PORT = env.PORT || 8080;
+
+db.createInitialData()
+
+app.get('/api/status', (req, res) => {
+
+    return res.status(200).json({
+        service: 'Auth-API',
+        status: "up",
+        httpStatus: 200,
+    });
+
+});
+
+app.use(express.json());
+
+app.use(UserRoute);
+
+app.listen(PORT, () => {
+
+    console.info(`Server started successfully at port ${PORT}`);
+
+});
